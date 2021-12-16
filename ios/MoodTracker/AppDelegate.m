@@ -22,6 +22,7 @@ static void InitializeFlipper(UIApplication *application) {
   [client start];
 }
 #endif
+                    
 
 @implementation AppDelegate
 
