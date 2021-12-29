@@ -1,7 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
 import { MoodOptionType } from '../types';
 import { theme } from '../theme';
+import { AppText } from './AppText';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+
+const ReanimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const moodOptions: MoodOptionType[] = [
   { emoji: '🧑‍💻', description: 'studious' },
@@ -18,8 +29,17 @@ type MoodPickerProps = {
 };
 
 export const MoodPicker: React.FC<MoodPickerProps> = ({ handleSelectMood }) => {
+  const dimensions = useWindowDimensions();
   const [selectedMood, setSelectedMood] = useState<MoodOptionType>();
   const [hasSelected, setHasSelected] = useState(false);
+
+  const buttonStyle = useAnimatedStyle(
+    () => ({
+      opacity: selectedMood ? withTiming(1) : withTiming(0.5),
+      transform: [{ scale: selectedMood ? withTiming(1) : 0.8 }],
+    }),
+    [selectedMood],
+  );
 
   const handleSelect = useCallback(() => {
     if (selectedMood) {
@@ -66,9 +86,11 @@ export const MoodPicker: React.FC<MoodPickerProps> = ({ handleSelectMood }) => {
           </View>
         ))}
       </View>
-      <Pressable style={styles.button} onPress={handleSelect}>
+      <ReanimatedPressable
+        style={[styles.button, buttonStyle]}
+        onPress={handleSelect}>
         <Text style={styles.buttonText}>Choose</Text>
-      </Pressable>
+      </ReanimatedPressable>
     </View>
   );
 };
@@ -89,7 +111,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#fff',
     borderWidth: 2,
-    marginBottom: 5,
   },
   selectedMoodItem: {
     borderWidth: 2,
@@ -98,38 +119,38 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: theme.colorPurple,
-    fontWeight: 'bold',
     fontSize: 10,
     textAlign: 'center',
+    fontFamily: theme.fontFamilyBold,
   },
   container: {
+    height: 250,
     borderWidth: 2,
     borderColor: theme.colorPurple,
     margin: 0,
     borderRadius: 10,
     padding: 20,
     backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'space-between',
   },
   heading: {
     fontSize: 20,
-    fontWeight: 'bold',
     letterSpacing: 1,
     textAlign: 'center',
-    marginBottom: 20,
     color: theme.colorWhite,
+    fontFamily: theme.fontFamilyBold,
   },
   button: {
     backgroundColor: theme.colorPurple,
     width: 150,
     borderRadius: 20,
-    marginTop: 20,
     alignSelf: 'center',
     padding: 10,
   },
   buttonText: {
     color: theme.colorWhite,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: theme.fontFamilyBold,
   },
   image: {
     alignSelf: 'center',

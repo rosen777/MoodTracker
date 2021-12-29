@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, ImageBackground } from 'react-native';
+import { StyleSheet, ImageBackground } from 'react-native';
 import { MoodPicker } from '../components/MoodPicker';
 import { useAppContext } from '../App.provider';
 
@@ -17,6 +17,11 @@ export const Home: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  square: {
+    width: 100,
+    height: 100,
+    backgroundColor: 'lightgreen',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
